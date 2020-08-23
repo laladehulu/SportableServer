@@ -1,6 +1,7 @@
 const express = require("express");
 const multer = require("multer");
 const AuthService = require("../services/Authentication")
+const userRoute = require("./userRoute");
 const storage = multer.diskStorage({
     destination:function(req,file,cb){
         cb(null, "./uploads");
@@ -10,6 +11,7 @@ const storage = multer.diskStorage({
     }
 })
 var router = express.Router();
+router.use(userRoute);
 router.post("/signup", async function(req,res){
     var user = {name: req.body.name, email: req.body.email, password:req.body.password}
     console.log(req.body);
@@ -33,5 +35,6 @@ router.post("/login",async function(req,res){
         console.log(e);
     }
 });
+
 
 module.exports=router;

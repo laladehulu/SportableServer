@@ -4,7 +4,31 @@ class Authentication{
     constructor(){
 
     }
-    
+    GetUserFromJwtMiddleware(){
+
+    }
+   async UserFromJwtMiddleware(req,res,next){
+        if(!req.cookies.token){res.send("no token")}
+        const token = req.body.token;//get the jwt token from the header bearer token
+        let verifiedToken;
+        try{
+             verifiedToken= await jwt.verify(token,"ljkadkawdad");
+             //console.log(verifiedToken);
+             //set the user to the found user;
+            req.jwtTokenData = verifiedToken.data;//will be used by the userfromJwt middleware
+             req.foundUser = await userModel.findById(verifiedToken.data._id);
+             if(!req.foundUser){
+                 res.send("cant find user");
+             }
+             next();
+        }
+       
+        catch(e){
+            console.log(e);
+            return res.send("invalid token");
+        }
+        
+    }
     async Signup(user){
         console.log(user);
         var createdUser = await userModel.create({
@@ -19,7 +43,7 @@ class Authentication{
         return password;
     }
     comparetoHashedPassword(password,hashedPassword){
-        if(password == hashedPassword){
+        if(password === hashedPassword){
             return true;
         }
         return false;
@@ -31,6 +55,8 @@ class Authentication{
         if(!foundUser){
             throw "Cant FInd user";
         }
+        console.log("form password",user.password);
+        console.log("saved",foundUser.password);
         if(this.comparetoHashedPassword(user.password,foundUser.password)){
             return this.generateToken(user);
         }
