@@ -11,7 +11,7 @@ const storage = multer.diskStorage({
     }
 })
 var router = express.Router();
-router.use(userRoute);
+router.use("/user",userRoute);
 router.post("/signup", async function(req,res){
     var user = {name: req.body.name, email: req.body.email, password:req.body.password}
     console.log(req.body);
