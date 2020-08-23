@@ -27,6 +27,10 @@ router.post("/login",async function(req,res){
     try{
         var user = {email: req.body.email, password:req.body.password}
         var jwtToken = AuthService.login(user);
+        if(!jwtToken){
+            return res.status(500).send("invalid password");
+        }
+        
         res.cookie("token",jwtToken).send("account verified successfully");
     
     }

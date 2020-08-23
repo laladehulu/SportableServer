@@ -28,3 +28,4 @@ class ClassService{
     }
     
 }
+module.exports =new ClassService();

@@ -8,11 +8,13 @@ class Authentication{
 
     }
    async UserFromJwtMiddleware(req,res,next){
+       console.log(req.cookies);
         if(!req.cookies.token){res.send("no token")}
         const token = req.body.token;//get the jwt token from the header bearer token
+        console.log(token);
         let verifiedToken;
         try{
-             verifiedToken= await jwt.verify(token,"ljkadkawdad");
+             verifiedToken=  jwt.verify(token,"ljkadkawdad");
              //console.log(verifiedToken);
              //set the user to the found user;
             req.jwtTokenData = verifiedToken.data;//will be used by the userfromJwt middleware
@@ -49,7 +51,7 @@ class Authentication{
         return false;
     }
     async login(user){
-        var foundUser = userModel.findOne({email:user.email});
+        var foundUser = await userModel.findOne({email:user.email});
         console.log(foundUser);
         
         if(!foundUser){
