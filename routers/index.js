@@ -20,7 +20,7 @@ router.post("/signup", async function(req,res){
         res.send("failed to generate user and token")
     }
     else{
-        res.cookie("token",jwtToken).send("account created successfully");
+        res.cookie("token",jwtToken).send("account created successfully "+ jwtToken);
     }
  })
 router.post("/login",async function(req,res){
@@ -31,7 +31,7 @@ router.post("/login",async function(req,res){
             return res.status(500).send("invalid password");
         }
         
-        res.cookie("token",jwtToken).send("account verified successfully");
+        res.cookie("token",jwtToken).send("account verified successfully " + jwtToken);
     
     }
     catch(e){

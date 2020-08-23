@@ -8,17 +8,19 @@ class Authentication{
 
     }
    async UserFromJwtMiddleware(req,res,next){
-       console.log(req.cookies);
-        if(!req.cookies.token){res.send("no token")}
-        const token = req.body.token;//get the jwt token from the header bearer token
+       console.log("cookies",req.cookies);
+        if(!req.cookies.token){return res.send("no token")}
+        var token = req.cookies.token;//get the jwt token from the header bearer token
         console.log(token);
+
         let verifiedToken;
         try{
              verifiedToken=  jwt.verify(token,"ljkadkawdad");
              //console.log(verifiedToken);
              //set the user to the found user;
-            req.jwtTokenData = verifiedToken.data;//will be used by the userfromJwt middleware
-             req.foundUser = await userModel.findById(verifiedToken.data._id);
+            
+            console.log(verifiedToken.data.email);
+             req.foundUser = await userModel.find({email:verifiedToken.data.email});
              if(!req.foundUser){
                  res.send("cant find user");
              }
@@ -27,7 +29,7 @@ class Authentication{
        
         catch(e){
             console.log(e);
-            return res.send("invalid token");
+            return res.send("invalid token  or error"+e);
         }
         
     }

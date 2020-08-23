@@ -22,7 +22,7 @@ router.get("/class",async function(req,res) {
     res.send("you got rickrolled");
 });
 
-router.post("/:code",uploads.single("video"),async function(req,res){
+router.post("/submit/:code",uploads.single("video"),async function(req,res){
     
     console.log("file",req.file.path);
     try{
